@@ -4,7 +4,7 @@ import db from "./src/db/db.js"
 import authRouter from "./src/routes/authRouter.js"
 import { ServerApiVersion } from "mongodb";
 
-const port = 5000;
+const port = 5001;
 const server = express();
 
 server.use(cors())
