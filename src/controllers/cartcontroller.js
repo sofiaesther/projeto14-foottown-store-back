@@ -2,10 +2,11 @@ import db from "../db/db.js";
 
 const addCart = async (req,res)=>{
     const client = res.locals.user;
+    const session = res.locals.session;
     const { itemId } = req.body;
 
     try{
-        const userCart = await db.collection('carts').findOne({userId:client._id});
+        const userCart = await db.collection('carts').findOne({userId:session._id});
         const itensList = userCart.itens;
         itensList.push(itemId);
         const newItens = {itens:itensList};

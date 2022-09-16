@@ -21,9 +21,10 @@ async function hadLogin( req, res, next ){
             return res.sendStatus(401);
         }
 
+        res.locals.session = session;
         res.locals.user = user;
         next();
-        
+
     }catch(err){
         res.send(err);
     }

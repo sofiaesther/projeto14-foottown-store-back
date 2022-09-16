@@ -1,7 +1,7 @@
 import db from '../db/db.js';
 
 async function hasCart(req, res, next){
-    client = res.locals.user;
+    client = res.locals.session;
 
     try{
         const cart = await db.collection('carts').findOne({userId:client._id});
