@@ -1,5 +1,23 @@
 import db from "../db/db.js";
 
+const getCart = async (req,res) =>{
+    const session = res.locals.session;
+    try{
+        const cart = await db.collection('carts').findOne({userId:session._id});
+        const itens =[];
+        for (let i =0; i<cart.itens.length; i++){
+            let itemid = cart.itens[i];
+            const item = await db.collection('itens').findOne({_id:itemid});
+            itens.push(item);
+        };
+
+        res.send(itens);
+
+    }catch(err){
+        res.send(err);
+    };
+};
+
 const addCart = async (req,res)=>{
     const client = res.locals.user;
     const session = res.locals.session;
@@ -26,7 +44,7 @@ const removeCart = async (req,res)=>{
     const { itemId } = req.body;
 
     try{
-        const userCart = await db.collection('carts').findOne({userId:client._id});
+        const userCart = await db.collection('carts').findOne({id:client._id});
         const itensList = userCart.itens;
         itensList.filter((i)=>i!==itemId);
         newItens = {itens: itensList};
@@ -39,4 +57,4 @@ const removeCart = async (req,res)=>{
     };
 };
 
-export {addCart, removeCart};
+export {addCart, removeCart, getCart};

@@ -1,5 +1,5 @@
 import express from 'express';
-import { addCart, removeCart } from '../controllers/cartcontroller.js';
+import { addCart, removeCart, getCart } from '../controllers/cartcontroller.js';
 import authMiddleware from '../middlewares/authMiddleware.js';
 import cartMiddleware from '../middlewares/cartMiddlewares.js';
 
@@ -11,6 +11,8 @@ router.use(cartMiddleware);
 
 
 router.put('/addCart',addCart);
-router.put('removeCart',removeCart);
+router.put('/removeCart',removeCart);
+router.get('/cart',getCart);
+
 
 export default router;
