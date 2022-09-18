@@ -8,7 +8,6 @@ const signUp = async (req, res) => {
 
     try {
         const userRepeated = await db.collection("users").find({ name }).toArray();
-        console.log(userRepeated);
 
         if (userRepeated.length !== 0) {
             res.sendStatus(409);
@@ -16,22 +15,21 @@ const signUp = async (req, res) => {
         }
 
         const registerSchema = joi.object({
-            name: joi.string().required().min(1),
-            email: joi.string().required().email(),
-            password: joi.string().required().min(8),
+            name: joi.string().required().min(1).empty(),
+            email: joi.string().required().email().empty(),
+            password: joi.string().required().min(8).empty(),
             confirmPassword: joi.ref("password")
         })
 
         const validation = registerSchema.validate({ name, email, password, confirmPassword }, { abortEarly: false })
 
         if (validation.error) {
-            console.log(validation.error.details.message)
-            res.sendStatus(422);
+            res.status(422).send(validation.error.details[0].message);
             return;
         }
 
+
         const encryptedPassword = bcrypt.hashSync(password, 10);
-        console.log(encryptedPassword);
         const response = await db.collection("users").insertOne({ name, email, password: encryptedPassword })
 
         res.sendStatus(202);
@@ -45,6 +43,7 @@ const signIn = async (req, res) => {
     const { email, password } = req.body;
 
     try {
+        const { email, password } = req.body;
 
         const userSchema = joi.object({
             email: joi.string().email().required(),
@@ -54,12 +53,12 @@ const signIn = async (req, res) => {
         const validation = userSchema.validate({ email, password }, { abortEarly: false });
 
         if (validation.error) {
-            console.log(validation.error.details.message);
-            res.sendStatus(422);
+            res.status(422).send(validation.error.details[0].message);
             return;
         }
 
         const user = await db.collection("users").findOne({ email });
+
         const isPasswordValid = bcrypt.compareSync(password, user.password);
 
         if (user && isPasswordValid) {
@@ -71,7 +70,7 @@ const signIn = async (req, res) => {
 
             res.status(202).send(token);
         } else {
-            res.sendStatus(401);
+            res.sendStatus(401)
         }
 
 
