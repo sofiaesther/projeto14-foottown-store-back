@@ -8,6 +8,6 @@ const router = express.Router();
 router.use(AuthMiddleware);
 router.use(CheckoutMiddleware);
 
-router.post('/checkout', checkout);
+router.post('/check-out', checkout);
 
 export default router;
