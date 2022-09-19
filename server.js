@@ -22,4 +22,4 @@ server.use(productRouter);
 
 
 
-server.listen(port, () => { console.log(`listen on port ${port}`) })
+server.listen(process.env.PORT || 5001, () => { console.log(`listen on port ${process.env.PORT}`) })
